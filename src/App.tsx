@@ -1,10 +1,17 @@
 
+import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
+
+import HomePage from './pages/HomePage';
+import ChatPage from './pages/ChatPage';
 
 function App() {
   return (
-    <div className="flex flex-1 h-screen justify-center items-center self-center">
-      <h1 className="text-2xl font-bold  text-white">Welcome</h1>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/chat" element={<ChatPage />} />
+      </Routes>
+    </Router>
   );
 }
 
