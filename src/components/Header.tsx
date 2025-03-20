@@ -6,7 +6,7 @@ const Header = () => {
     <nav className="w-full flex justify-between items-center py-4 px-6 opacity-0 animate-fade-in">
       <div className="flex items-center">
         <a href="/" className="text-white font-bold text-xl">
-          <span className="text-white">bolt</span>
+          <span className="text-white">schema</span>
         </a>
       </div>
       <div className="flex items-center space-x-4">

@@ -23,7 +23,7 @@ const StackIcon: React.FC<StackIconProps> = ({
     right: 'left-10 top-0',
     left: 'right-10 top-0',
     top: 'bottom-10 left-0',
-    bottom: '',
+    bottom: 'mt-12',
   };
 
   return (
@@ -39,7 +39,7 @@ const StackIcon: React.FC<StackIconProps> = ({
       {/* Toolbar (conditionally rendered) */}
       {isHovered && (
     
-          <p className={`${toolbarClasses[toolbarPosition]}  bg-transparent border border-schema-gray text-white self-center rounded-md px-2 py-1 text-xs transition-all duration-300`}>
+          <p className={`${toolbarClasses[toolbarPosition]} absolute bg-transparent border border-schema-gray text-white self-center rounded-md px-2 py-1 text-xs transition-all duration-300`}>
             {toolbarText}
           </p>
         

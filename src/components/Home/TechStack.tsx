@@ -13,12 +13,12 @@ import StackIcon from "./StackIcon";
 
 const TechStack = () => {
   return (
-    <div className="mt-10 w-full max-w-2xl mx-auto  overflow-y-hidden">
+    <div className=" mt-10 w-full max-w-2xl mx-auto  overflow-y-hidden">
       <p className="text-gray-500 text-center mb-5 opacity-0 animate-fade-in animate-delay-500">
         Works well with most Databases and ORMs
       </p>
 
-      <div className="grid grid-cols-4 sm:grid-cols-8 gap-8 justify-items-center mb-12">
+      <div className="grid grid-cols-4 sm:grid-cols-7  mb-10">
         <StackIcon
           icon={PiFileSql}
           toolbarText="SQL"

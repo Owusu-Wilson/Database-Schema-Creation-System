@@ -40,6 +40,7 @@ export default {
 					blue: '#3a82f7',
 					gray: '#3a4046',
 					'light-gray': '#5a6169',
+					green:'#00a457'
 				},
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',

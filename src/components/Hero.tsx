@@ -1,7 +1,7 @@
-import Announcement from './Announcement';
-import TextInput from './TextInput';
-import OptionRow from './OptionRow';
-import TechStack from './TechStack';
+import Announcement from './Home/Announcement';
+import TextInput from './Home/TextInput';
+import OptionRow from './Home/OptionRow';
+import TechStack from './Home/TechStack';
 
 const Hero = () => {
   const firstRowOptions = ['Import from Figma', 'Build a mobile app with Expo', 'Start a blog with Astro'];
