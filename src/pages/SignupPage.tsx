@@ -16,7 +16,7 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
-  const { login, user } = useAuth();
+  const { signup, user} = useAuth();
 
   // Redirect if user is already logged in
   useEffect(() => {
@@ -33,16 +33,12 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      await signup(email, password);
       // Navigation will be handled by the useEffect above
     } catch (err) {
-      if (err instanceof Error) {
-        // Handle specific error messages
-        setError(err.message);
-      } else {
-        setError('An error occurred during sign in');
-        
-      }
+      console.log(err, 'error from signup function')
+      setError(err);
+     
     } finally {
       setIsLoading(false);
     }

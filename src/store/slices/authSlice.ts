@@ -25,8 +25,10 @@ const initialUserData:User = {
   email:'owusuwilson980@gmail.com', 
 
 }
+const storedUser = localStorage.getItem('user');
+
 const initialState: AuthState = {
-  user: initialUserData,
+  user: storedUser ? JSON.parse(storedUser) : null,
   isLoading: false,
   error: null,
 };
@@ -46,28 +48,51 @@ const getUserProfile = async (id: string) => {
 
   return data;
 };
+// Async thunk for signup
+export const signup = createAsyncThunk(
+  '/signup',
+  async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+
+      const user = {
+        id: data.user.id,
+        email: data.user.email || '',
+        role: 'user',
+      };
+
+      // Save user to local storage
+      localStorage.setItem('user', JSON.stringify(user));
+
+      return user;
+    } catch (error) {
+      if (error instanceof AuthError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('An error occurred during signup');
+    }
+  }
+);
 
 // Async thunk for login
 export const login = createAsyncThunk(
-  'auth/login',
+  '/login',
   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
       if (error) throw error;
 
-      // Fetch the user's profile to get the role
-      const profile = await getUserProfile(data.user.id);
-
-      if (!profile) {
-        throw new Error('User profile not found');
-      }
-
-      return {
+      const user = {
         id: data.user.id,
         email: data.user.email || '',
-        role: profile.role || 'user',
+        role: 'authenticated',
       };
+
+      // Save user to local storage
+      localStorage.setItem('user', JSON.stringify(user));
+
+      return user;
     } catch (error) {
       if (error instanceof AuthError) {
         return rejectWithValue(error.message);
@@ -82,6 +107,10 @@ export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValu
   try {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+
+    // Clear user from local storage
+    localStorage.removeItem('user');
+
     return null;
   } catch (error) {
     if (error instanceof AuthError) {
@@ -97,6 +126,19 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+        // Signup
+        .addCase(signup.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(signup.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.user = action.payload;
+        })
+        .addCase(signup.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload as string;
+        })
       // Login
       .addCase(login.pending, (state) => {
         state.isLoading = true;

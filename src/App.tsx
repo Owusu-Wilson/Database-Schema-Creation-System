@@ -10,6 +10,8 @@ import { Provider } from 'react-redux';
 import { Suspense } from 'react';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import { ProjectsPage } from './pages/ProjectsPage';
+import ProtectedRoute from './components/ProtectedRoute';
 function Loading() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -39,6 +41,9 @@ function App() {
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        
+        <Route path="/project/*" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
+        <Route path="/projects" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
 
       </Routes>
       </Suspense>

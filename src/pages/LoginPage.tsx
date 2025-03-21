@@ -38,13 +38,9 @@ export default function LoginPage() {
       await login(email, password);
       // Navigation will be handled by the useEffect above
     } catch (err) {
-      if (err instanceof Error) {
-        // Handle specific error messages
-        setError(err.message);
-      } else {
-        setError('An error occurred during sign in');
-        
-      }
+      console.log(err, 'error from login function')
+      setError(err);
+     
     } finally {
       setIsLoading(false);
     }
