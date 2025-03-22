@@ -59,7 +59,8 @@ Build a web application that assists users in designing their own database schem
    - Your full name.
 
 3. **Talent Profile Requirement:**  
-   Complete your talent profile sign-up on [gigsama.com](https://gigsama.com) **before** submitting your project.
+   Complete your talent profile sign-up on [gigsama.com](4170
+   ) **before** submitting your project.
 
 - **Deadline:**  
   Saturday, March 22, 12:59 PM GMT

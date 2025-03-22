@@ -2,7 +2,9 @@
 
 ## Overview
 This project is a web-based tool that leverages AI to infer database schemas from natural language descriptions and generates Entity-Relationship (ER) diagrams. It integrates with Google's Generative AI (Gemini) to extract entities, attributes, and relationships from text input. The inferred schema is visualized using React Flow, and the project is built with modern web technologies like React, TypeScript, and Vite.
+It is a submission for the Database Schema Creation System Test.
 
+Find a deployed version [Keymap](https://wilson-keymap.vercel.app).
 ---
 
 ## Features
@@ -11,6 +13,7 @@ This project is a web-based tool that leverages AI to infer database schemas fro
 - **Real-Time Updates**: Automatically updates the diagram as the schema is inferred.
 - **User-Friendly Interface**: Provides a clean and intuitive UI for inputting text and viewing results.
 - **Persistent Storage**: Saves project data (including chat history and schemas) for future reference.
+- **User Management & Authentication**: Users can create account and have projects associated with them.
 
 ---
 
@@ -24,7 +27,7 @@ This project is a web-based tool that leverages AI to infer database schemas fro
 
 - **Backend**:
   - **Google Generative AI (Gemini)**: Powers the AI-based schema inference.
-  - **Local Storage**: Used for persisting project data (can be replaced with a backend service if needed).
+  - **Supabase Storage**: Supabase is used as the storage solution.
 
 - **Other Tools**:
   - **React Router**: For navigation within the app.
@@ -55,8 +58,7 @@ This project is a web-based tool that leverages AI to infer database schemas fro
    - React Query is used for managing server state (e.g., fetching and updating project data).
 
 4. **Persistence**:
-   - Project data (including chat history and inferred schemas) is stored locally using the browser's `localStorage`.
-   - This can be replaced with a backend service (e.g., Firebase, PostgreSQL) for production use.
+   - Project data (including chat history and inferred schemas) is stored on supabase
 
 ---
 
@@ -84,6 +86,7 @@ This project is a web-based tool that leverages AI to infer database schemas fro
 - Node.js (v18 or higher)
 - npm (v9 or higher)
 - Google Generative AI API Key (obtain from [Google Cloud Console](https://console.cloud.google.com/))
+- A Supabase Account and project [Supabase](https://supabase.com/))
 
 ### Steps
 1. **Clone the Repository**:
