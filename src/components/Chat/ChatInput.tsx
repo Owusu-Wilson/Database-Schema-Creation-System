@@ -11,7 +11,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, setValue, onSubmit }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && value) {
       e.preventDefault();
       onSubmit();
     }
@@ -32,6 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, setValue, onSubmit }) => {
           
         />
         <button
+          disabled={!value}
           onClick={onSubmit}
           className="flex items-center justify-center p-2 mr-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
           aria-label="Submit"

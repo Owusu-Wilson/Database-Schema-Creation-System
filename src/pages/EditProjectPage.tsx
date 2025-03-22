@@ -8,10 +8,10 @@ import ChatInput from "@/components/Chat/ChatInput";
 import Navbar from "@/components/Navbar";
 import OutputSection from "@/components/Chat/OutputSection";
 import ChatBubble from "@/components/Chat/ChatBubble";
-import { chatSession } from "@/lib/services/genai";
+import { chatSession, startChatWithHistory } from "@/lib/ai/genai"; // Import startChatWithHistory
 import { schemaProjectsService } from "@/lib/services/projects";
 import { ChatMessage, Project } from "@/types";
-import { title } from "process";
+import { entitySelecorAI } from "@/lib/ai/entitySelecor";
 
 const EditProjectPage = () => {
   const { id } = useParams<{ id: string }>(); // Extract the `id` from the URL
@@ -21,6 +21,8 @@ const EditProjectPage = () => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [isMessageSent, setIsMessageSent] = useState(false);
+
+  const [extractedEntities, setExtractedEntities] = useState([]);
 
   const notify = (message: string) => toast(message);
 
@@ -47,6 +49,17 @@ const EditProjectPage = () => {
   }, [currentProject]);
 
   /**
+   * Converts the `chats` array into the GenAI history format.
+   * @returns An array of messages in the format { role: string, parts: { text: string }[] }.
+   */
+  const getGenAIHistory = () => {
+    return chats.map((chat) => ({
+      role: chat.type === "user" ? "user" : "model",
+      parts: [{ text: chat.content }], // Ensure `parts` is an array of objects with a `text` property
+    }));
+  };
+
+  /**
    * Adds a message to the chat history, and returns the new message
    * @param message The content of the message
    * @param type The type of the message, either "user" or "ai"
@@ -63,7 +76,16 @@ const EditProjectPage = () => {
    * @returns The AI's response
    */
   const sendMessageToAI = async (message: string): Promise<string> => {
-    const result = await chatSession.sendMessage(message);
+    const history:any = getGenAIHistory(); // Get the chat history in GenAI format
+    const session = startChatWithHistory(history); // Start a chat session with the history
+    const result = await session.sendMessage(message);
+    const aiResponse = await result.response.text();
+    return aiResponse;
+  };
+
+  const queryEntitySelecorAI = async (message: string): Promise<string> => {
+    
+    const result = await entitySelecorAI.sendMessage(message);
     const aiResponse = await result.response.text();
     return aiResponse;
   };
@@ -110,12 +132,17 @@ const EditProjectPage = () => {
       const aiResponse = await sendMessageToAI(message);
       setResponse(aiResponse);
 
+      // Step 2: Send the request to entitysectlection ai
+      const extractedEntities = await queryEntitySelecorAI(JSON.parse(aiResponse).response);
+      console.log(extractedEntities)
+      setExtractedEntities(JSON.parse(extractedEntities).response);
+
       // Step 3: Add the AI's response to the chat history (optimistic update)
       const aiMessage = addMessageToChat(aiResponse, "ai");
       setChats((prevChats) => [...prevChats, aiMessage]);
 
       // Step 4: Update the project with the new chat history
-      await updateProject({ chats: [...chats, userMessage, aiMessage],  title: JSON.parse(aiMessage.content).project_title });
+      await updateProject({ chats: [...chats, userMessage, aiMessage], title: JSON.parse(aiMessage.content).project_title });
 
       // Step 5: Invalidate the query to refresh the data
       await queryClient.invalidateQueries({ queryKey: ["project", id] });
@@ -149,21 +176,22 @@ const EditProjectPage = () => {
         newestOnTop={true}
       />
       <div className="flex-1 flex flex-col justify-between">
-        {!currentProject ? (
-          <OutputSection />
-        ) : (
+       
           <div className="flex-1 flex flex-col items-center justify-center px-6">
             <h1 className="text-3xl font-medium mb-2 text-black">
-              {currentProject.title}
+              {currentProject?.title}
             </h1>
           </div>
-        )}
+          <div className="flex-1 flex flex-col items-center justify-center px-6">
+            {extractedEntities && <OutputSection type="entities-only" content={JSON.stringify(extractedEntities)} />}
+          </div>
+        
         <div className="flex-1 flex flex-col items-center justify-center px-6">
           <div className="text-center transform transition-all duration-700 translate-y-0 opacity-100">
             {chats.slice(-2).map((chatMessage, index) => (
               <ChatBubble key={index} message={chatMessage} />
             ))}
-            
+       
           </div>
         </div>
 
