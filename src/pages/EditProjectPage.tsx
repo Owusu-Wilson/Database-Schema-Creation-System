@@ -11,7 +11,8 @@ import ChatBubble from "@/components/Chat/ChatBubble";
 import { chatSession, startChatWithHistory } from "@/lib/ai/genai"; // Import startChatWithHistory
 import { schemaProjectsService } from "@/lib/services/projects";
 import { ChatMessage, Project } from "@/types";
-import { entitySelecorAI } from "@/lib/ai/entitySelecor";
+import { schemaInferenceAI } from "@/lib/ai/schemaInference";
+import { attributesExtractorAI } from "@/lib/ai/attributesSelector";
 
 const EditProjectPage = () => {
   const { id } = useParams<{ id: string }>(); // Extract the `id` from the URL
@@ -23,6 +24,12 @@ const EditProjectPage = () => {
   const [isMessageSent, setIsMessageSent] = useState(false);
 
   const [extractedEntities, setExtractedEntities] = useState([]);
+
+  const [extractedAttributes, setExtractedAttributes] = useState([]);
+
+  const [extractedSchema, setExtractedSchema] = useState({});
+
+
 
   const notify = (message: string) => toast(message);
 
@@ -83,9 +90,10 @@ const EditProjectPage = () => {
     return aiResponse;
   };
 
-  const queryEntitySelecorAI = async (message: string): Promise<string> => {
+
+  const querySchemaGenAI = async (message: string): Promise<string> => {
     
-    const result = await entitySelecorAI.sendMessage(message);
+    const result = await schemaInferenceAI.sendMessage(message);
     const aiResponse = await result.response.text();
     return aiResponse;
   };
@@ -132,25 +140,27 @@ const EditProjectPage = () => {
       const aiResponse = await sendMessageToAI(message);
       setResponse(aiResponse);
 
-      // Step 2: Send the request to entitysectlection ai
-      const extractedEntities = await queryEntitySelecorAI(JSON.parse(aiResponse).response);
-      console.log(extractedEntities)
-      setExtractedEntities(JSON.parse(extractedEntities).response);
 
-      // Step 3: Add the AI's response to the chat history (optimistic update)
+
+      // Step 3: Send the initial gemini response back to extract schema on another conversation 'thread'
+      const shemaGenResult = await querySchemaGenAI(JSON.parse(aiResponse).response);
+      setExtractedSchema(JSON.stringify(shemaGenResult));
+
+      
+      // Step 4: Add the AI's response to the chat history (optimistic update)
       const aiMessage = addMessageToChat(aiResponse, "ai");
       setChats((prevChats) => [...prevChats, aiMessage]);
 
-      // Step 4: Update the project with the new chat history
+      // Step 5: Update the project with the new chat history
       await updateProject({ chats: [...chats, userMessage, aiMessage], title: JSON.parse(aiMessage.content).project_title });
 
-      // Step 5: Invalidate the query to refresh the data
+      // Step 6: Invalidate the query to refresh the data
       await queryClient.invalidateQueries({ queryKey: ["project", id] });
     } catch (error) {
-      // Step 6: Handle errors
+      // Step 7: Handle errors
       handleError(error);
 
-      // Rollback optimistic updates if the request fails
+      
       setChats((prevChats) => prevChats.slice(0, -2)); // Remove the last two messages (user + AI)
     } finally {
       setLoading(false);
@@ -183,7 +193,7 @@ const EditProjectPage = () => {
             </h1>
           </div>
           <div className="flex-1 flex flex-col items-center justify-center px-6">
-            {extractedEntities && <OutputSection type="entities-only" content={JSON.stringify(extractedEntities)} />}
+            {Object.keys(extractedSchema).length > 0 && <OutputSection type="entities-attributes-relationships" content={JSON.stringify(extractedSchema)} />}
           </div>
         
         <div className="flex-1 flex flex-col items-center justify-center px-6">

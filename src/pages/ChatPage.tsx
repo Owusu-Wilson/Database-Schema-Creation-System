@@ -112,7 +112,7 @@ const ChatPage = () => {
         newestOnTop={true}
       />
       <div className="flex-1 flex flex-col justify-between">
-        <WelcomeSection text="Describe your project to get started" />
+        <WelcomeSection />
         <div className="flex-1 flex flex-col items-center justify-center px-6">
           {chats.slice(-2).map((chat, index) => (
             <div key={index} className='text-center transform transition-all duration-700 translate-y-0 opacity-100'>

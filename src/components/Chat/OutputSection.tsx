@@ -79,16 +79,16 @@ const OutputSection: React.FC<OutputSectionProps> = ({ content, type }) => {
 
   // Handle entities + attributes + relationships input
   const handleEntitiesWithAttributesAndRelationships = (data: {
-    entities: { [entity: string]: string[] };
-    relationships: { from: string; to: string }[];
+    entities: { name: string; attributes: string[]; primaryKey: string }[];
+    relationships: { from: string; to: string; type: string; via: string }[];
   }) => {
     const { entities, relationships } = data;
 
     // Create nodes for entities and attributes
-    const newNodes: Node[] = Object.entries(entities).map(([entity, attributes], index) => ({
-      id: entity,
+    const newNodes: Node[] = entities.map((entity, index) => ({
+      id: entity.name,
       position: { x: 100 + index * 200, y: 100 },
-      data: { label: `${entity}\n${attributes.join('\n')}` }, // Display entity and attributes
+      data: { label: `${entity.name}\n${entity.attributes.join('\n')}` }, // Display entity and attributes
     }));
 
     // Create edges for relationships
