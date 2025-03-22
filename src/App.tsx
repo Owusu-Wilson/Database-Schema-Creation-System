@@ -12,6 +12,11 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import EditProjectPage from './pages/EditProjectPage';
+import { NotFound } from './pages/NotFound';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 function Loading() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -32,24 +37,28 @@ function Loading() {
 
 function App() {
   return (
+    <QueryClientProvider client={queryClient}>
     <Provider store={store}>
       <AuthProvider>
     <Router>
     <Suspense fallback={<Loading/>}>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/chat" element={<ChatPage />} />
+        {/* <Route path="/" element={<HomePage />} /> */}
+        <Route path="/" element={<ChatPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         
-        <Route path="/project/*" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
+        <Route path="/project/:id" element={<ProtectedRoute><EditProjectPage /></ProtectedRoute>} />
         <Route path="/projects" element={<ProtectedRoute><ProjectsPage /></ProtectedRoute>} />
+        <Route path="/project/new" element={<ChatPage />} />
+        <Route path="/*" element={<NotFound />} />
 
       </Routes>
       </Suspense>
     </Router>
     </AuthProvider>
     </Provider>
+    </QueryClientProvider>
   );
 }
 

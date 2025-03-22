@@ -22,10 +22,10 @@ const Popup = ({user, handleLogout}:PopupProps) =>{
       <div 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className='top-16 right-5 absolute bg-transparent border border-schema-gray text-white self-center rounded-md px-2 py-1 text-xs animate-slide-up duration-200'>
+      className='top-16 right-5 absolute bg-transparent border border-schema-gray text-black self-center rounded-md px-2 py-1 text-xs animate-slide-up duration-200'>
         <ul>
-          <li className='border-b border-schema-gray p-2 cursor-pointer hover:bg-schema-light-gray hover:rounded-md hover:animate-pulse-slow'>My Profile</li>
-          <li onClick={handleLogout} className='border-b border-schema-gray p-2 cursor-pointer hover:bg-schema-light-gray hover:rounded-md hover:animate-pulse-slow'>Logout</li>
+          <li className='border-b border-schema-gray p-2 cursor-pointer hover:bg-slate-50 hover:rounded-md hover:animate-pulse-slow'>My Profile</li>
+          <li onClick={handleLogout} className='border-b border-schema-gray p-2 cursor-pointer hover:bg-slate-50 hover:rounded-md hover:animate-pulse-slow'>Logout</li>
           <li className=' p-2'>{user.email}</li>
         </ul>
       </div>

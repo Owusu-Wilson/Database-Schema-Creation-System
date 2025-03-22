@@ -95,12 +95,24 @@ export const login = createAsyncThunk(
       return user;
     } catch (error) {
       if (error instanceof AuthError) {
+        // Handle email not confirmed case
+        if (error.message === 'Email not confirmed') {
+          const { error: resendError } = await supabase.auth.resend({
+            type: 'signup',
+            email,
+          });
+          if (resendError) {
+            return rejectWithValue(`Failed to resend confirmation email: ${resendError.message}`);
+          }
+          return rejectWithValue('Email not confirmed. A new confirmation email has been sent.');
+        }
         return rejectWithValue(error.message);
       }
       return rejectWithValue('An error occurred during login');
     }
   }
 );
+
 
 // Async thunk for logout
 export const logout = createAsyncThunk('auth/logout', async (_, { rejectWithValue }) => {

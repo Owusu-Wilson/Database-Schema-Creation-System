@@ -11,7 +11,11 @@ type Message = {
   timestamp: Date;
 };
 
-const ChatPanel = () => {
+interface ChatPanelProps {
+  initialMessage: Message;
+}
+
+const ChatPanel: React.FC<ChatPanelProps> = ({ initialMessage}) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -22,6 +26,12 @@ const ChatPanel = () => {
   ]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    addMessage(initialMessage.content, 'user')
+  
+  }, [])
+  
 
   const addMessage = (content: string, type: 'user' | 'ai') => {
     const newMessage: Message = {
@@ -56,7 +66,7 @@ const ChatPanel = () => {
     <div className="flex flex-col h-screen z-50 pt-10">
 
 
-      <ScrollArea className="flex-1 p-4">
+      <ScrollArea className="flex-1 p-4 mt-5">
         <div className="space-y-6">
           {messages.map((message) => (
             <ChatMessage 

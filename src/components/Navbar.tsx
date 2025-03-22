@@ -1,13 +1,14 @@
 
-import { useLocation } from 'react-router-dom';
-
-import schemaAILogo from '@/assets/schema-ai-white.png'
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 import GuestLinks from './NavigationBar/GuestLinks';
-import ProjectsLink from './NavigationBar/ProjectsLink';
 import Popup from './NavigationBar/Popup';
-import Socials from './NavigationBar/Socials';
+
+import { TbListSearch } from 'react-icons/tb';
+import { PiShootingStarFill } from 'react-icons/pi';
+import { CgPlayListRemove } from 'react-icons/cg';
+
 
 
 
@@ -24,11 +25,11 @@ const Navbar = () => {
 
   return (
     <nav className="h-auto w-full flex justify-between items-center py-4 px-6 top-0">
-      <div className="flex items-center">
-        <a href="/" className="text-white font-bold text-xl">
-          {/* <span className="text-white">schema AI</span> */}
-          <img src={schemaAILogo} alt="schema AI" className='w-full h-10 bg-transparent rounded-md object-contain' />
-        </a>
+      <div className="flex flex-row items-center">
+        <Link to={'/'} className="flex flex-row items-center gap-2 text-black font-semibold text-lg">
+        <PiShootingStarFill  size={24} />
+          <span className="text-black">KeyMap</span>
+        </Link>
       </div>
      
      
@@ -36,8 +37,15 @@ const Navbar = () => {
 
       <div className="flex items-center space-x-4">
       {user?
-      (<div className='flex gap-4 mr-8'>
-        {!isActive('/projects') ?<ProjectsLink/>: null}
+      (<div className='flex items-center gap-4 mr-8'>
+        
+        
+        {isActive('/projects')?
+        (<><CgPlayListRemove size={24} className='text-gray-500' /></>)
+        :
+        (<Link to={'/projects'}><TbListSearch size={24} className='text-gray-500' /></Link>)
+        }
+        
       
       <Popup user={user} handleLogout={handleLogout}/>
       </div>)
@@ -45,7 +53,7 @@ const Navbar = () => {
 
      {!user?<GuestLinks />: null}  
      
-      <Socials/>
+      {/* <Socials/> */}
       
       </div>
     </nav>

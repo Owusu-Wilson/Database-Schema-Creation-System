@@ -3,10 +3,13 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 
-import schemaAILogo from '@/assets/schema-ai-white.png'
+import { FaGithub, FaGoogle } from 'react-icons/fa';
 import GithubButton from '../components/Authentication/GithubButton';
 import GoogleButton from '../components/Authentication/GoogleButton';
 import Divider from '../components/Authentication/Divider';
+
+import { PiShootingStarFill } from 'react-icons/pi';
+
 
 
 export default function SignupPage() {
@@ -45,16 +48,26 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-schema-dark flex flex-col">
+    <div className="min-h-screen w-full bg-white flex flex-col">
       {/* Top Navigation */}
       <Navbar/>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-4">
-        <div className="max-w-md w-full space-y-8 text-center">
+        <div
+        
+          className="max-w-md w-full space-y-8 text-center"
+        >
           <div className="space-y-3">
-          <img src={schemaAILogo} alt="schema AI" className='w-full h-20 bg-transparent rounded-md object-contain' />
-            <h1 className="text-4xl font-semibold text-white">Create An Account<span className="text-blue-500"></span></h1>
+         
+          
+    <a href="/" className="flex flex-row items-center justify-center gap-2 text-black font-semibold text-lg">
+    <PiShootingStarFill  size={30} />
+      <span className="text-black text-2xl">KeyMap</span>
+    </a>
+ 
+   
+            <h1 className="text-4xl font-semibold text-black">Create An Account <span className="text-blue-500"></span></h1>
             <p className="text-gray-500">Lets take care of your database</p>
           </div>
 

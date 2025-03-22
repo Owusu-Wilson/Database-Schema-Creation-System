@@ -95,10 +95,6 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-schema-darker text-white antialiased;
-    /* overflow-y: hidden */
-  }
 
   .bg-schema-gradient {
     @apply bg-gradient-dark;

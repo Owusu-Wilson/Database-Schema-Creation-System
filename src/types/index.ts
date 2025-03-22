@@ -1,9 +1,9 @@
 export interface Message {
-    id: number;
-    text: string;
-    sender: 'user' | 'ai';
-    timestamp: Date;
-  }
+  id: string;
+  type: 'user' | 'ai';
+  content: string;
+  timestamp: Date;
+};
 
 
 export interface User {
@@ -12,14 +12,31 @@ export interface User {
   role: 'user' | 'authenticated';
 }
 
+export interface ChatMessage{
+  timestamp: Date;
+  content: string;
+  type: 'user' | 'ai';
 
+}
 export interface Project {
   id: string;
-  name: string;
+  title: string;
+  owner: string;
+  chats: ChatMessage[]
+  is_public?: boolean;
+  created_at?: Date;
+  updated_at?: Date;
   
 }
 
-
+export interface SchemaOutput {
+  id: string;
+  project_id: string;
+  schema_type: string;
+  schema_data: string;
+  created_at: Date;
+  updated_at: Date;
+}
 
 // types.ts
 export interface AuthState {

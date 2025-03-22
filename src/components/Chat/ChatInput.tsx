@@ -1,47 +1,42 @@
-import React, { useState } from 'react';
-import { Send, Paperclip } from 'lucide-react';
-import { Textarea } from '../ui/textarea';
-
+import React, { useState } from "react";
+import { ArrowUp } from "lucide-react";
 
 interface ChatInputProps {
-  onSendMessage: (message: string) => void;
+  value: string;
+  setValue: (value: string) => void;
+  onSubmit: () => void;
 }
 
-const ChatInput = ({ onSendMessage }: ChatInputProps) => {
-  const [message, setMessage] = useState('');
+const ChatInput: React.FC<ChatInputProps> = ({ value, setValue, onSubmit }) => {
+  const [isFocused, setIsFocused] = useState(false);
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return;
-    onSendMessage(message);
-    setMessage('');
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       e.preventDefault();
-      handleSendMessage();
+      onSubmit();
     }
   };
 
   return (
-    <div className="relative glass-panel rounded-lg">
-      <Textarea
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="How can schema help you today?"
-        className="resize-none bg-transparent border-none focus:outline-none focus:ring-0 text-white placeholder-gray-500 min-h-[60px]"
-      />
-      <div className="flex justify-between items-center px-3 py-2 border-t border-schema-gray">
-        <button className="text-schema-light-gray hover:text-white transition-colors">
-          <Paperclip size={18} />
-        </button>
-        <button 
-          onClick={handleSendMessage}
-          className="bg-schema-blue text-white rounded-full p-2 hover:bg-opacity-80 transition-colors"
-          disabled={!message.trim()}
+    <div className="w-full flex justify-center px-6 py-8 transition-all">
+      <div className="w-full max-w-2xl flex items-center rounded-full border border-gray-200 bg-white shadow-sm overflow-hidden transition-all duration-300">
+        <input
+          type="text"
+          placeholder="Ask anything"
+          className="w-full h-16 py-3 px-6 outline-none text-gray-800 bg-transparent "
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          onKeyDown={handleKeyDown}
+          
+        />
+        <button
+          onClick={onSubmit}
+          className="flex items-center justify-center p-2 mr-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+          aria-label="Submit"
         >
-          <Send size={18} />
+          <ArrowUp size={16} />
         </button>
       </div>
     </div>
